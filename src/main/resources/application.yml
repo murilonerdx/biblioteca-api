@@ -1,0 +1,28 @@
+file:
+  upload-dir: upload
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20GB
+      max-request-size: 21GB
+  jackson:
+    date-format: "yyyy-MM-dd'T'HH:mm:ssXXX"
+    deserialization:
+      fail-on-unknown-properties: false
+    time-zone: "America/Sao_Paulo"
+  hateoas:
+    use-hal-as-default-json-media-type: false
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/library
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+# Springdoc OpenApi 3.1 & Swagger 3
+springdoc:
+  packagesToScan: org.astaron.bibliotecalogica.controller
+  swagger-ui:
+    path: /docs-library.html
+  api-docs:
+    path: /docs-library
