@@ -40,17 +40,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Extract tag name
+        id: tag_name
+        run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
+
+      - name: Build and push
         run: |
-          if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=${GITHUB_REF#refs/tags/}
-            IMAGE_TAG=${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:$TAG
-            echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          else
-            echo "IMAGE_TAG=${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:latest" >> $GITHUB_ENV
+          TAG=${{ steps.tag_name.outputs.TAG }}
+          if [[ -z "$TAG" ]]; then
+            TAG="latest"
           fi
+          IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:$TAG"
           docker build . --file Dockerfile --tag $IMAGE_TAG
           docker push $IMAGE_TAG
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
