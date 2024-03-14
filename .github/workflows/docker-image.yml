@@ -22,11 +22,43 @@ jobs:
         # Removendo a opção options para simplificar e ver se resolve o problema de inicialização.
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag biblioteca-logica:latest
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag biblioteca-logica:latest
 
-    - name: Run container from the image
-      run: |
-        docker run --name app -d biblioteca-logica:latest
+      - name: Run container from the image
+        run: |
+          docker run --name app -d biblioteca-logica:latest
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Passo de Login no Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Constrói a imagem Docker
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag biblioteca-logica:latest
+
+      # Adiciona mais um passo para marcar a imagem com a versão da tag, se existir
+      - name: Tag image
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          docker tag biblioteca-logica:latest ${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:$TAG
+          echo "TAGGED_IMAGE=${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:$TAG" >> $GITHUB_ENV
+
+      # Publica a imagem no Docker Hub
+      - name: Push Docker image
+        if: env.TAGGED_IMAGE != ''
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:latest
+          docker push $TAGGED_IMAGE
+  
