@@ -7,12 +7,33 @@ on:
     branches: [ "master" ]
 
 jobs:
-
-  build:
-
+  build-and-test:
     runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: 12345
+          MONGO_INITDB_DATABASE: library
+        options: >-
+          --network-alias mongo
+          --health-cmd "mongo --eval 'db.runCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag biblioteca-logica:$(date +%s)
+      run: docker build . --file Dockerfile --tag biblioteca-logica:latest
+
+    # Aqui você pode adicionar etapas para testar a imagem, se necessário
+    - name: Run container from the image
+      run: |
+        docker run --network container:mongo --name app -d biblioteca-logica:latest
+
