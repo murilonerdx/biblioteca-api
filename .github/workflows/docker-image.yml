@@ -57,11 +57,11 @@ jobs:
           echo "IMAGE_TAG=${{ github.repository_owner }}/biblioteca-logica:$TAG" >> $GITHUB_ENV
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
         run: |
           docker build . --file Dockerfile --tag $IMAGE_TAG
           docker push $IMAGE_TAG
+        uses: docker/build-push-action@v4
+        with:
+          context: .
         env:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
