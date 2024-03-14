@@ -1,4 +1,7 @@
 name: Docker Image CI
+permissions:
+  contents: read
+  packages: write
 
 on:
   push:
@@ -60,4 +63,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ github.repository_owner }}/biblioteca-logica:latest
+          tags: ${{ github.repository_owner }}/biblioteca-logica:${{ env.TAG }}
