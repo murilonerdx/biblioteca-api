@@ -25,7 +25,7 @@ jobs:
         # Removendo a opção options para simplificar e ver se resolve o problema de inicialização.
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag biblioteca-logica:latest
