@@ -95,6 +95,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>org.astaron.bibliotecalogica.BibliotecaLogicaApplication</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -105,5 +106,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>
