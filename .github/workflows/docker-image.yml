@@ -63,7 +63,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -f Dockerfile . --tag $IMAGE_TAG
+          cd ../../
+          docker build . --file Dockerfile --tag $IMAGE_TAG
           docker push $IMAGE_TAG
         env:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
