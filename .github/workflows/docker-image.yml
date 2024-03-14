@@ -19,12 +19,7 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: 12345
           MONGO_INITDB_DATABASE: library
-        options: >-
-          --network-alias mongo
-          --health-cmd "mongo --eval 'db.runCommand({ping: 1})'"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        # Removendo a opção options para simplificar e ver se resolve o problema de inicialização.
 
     steps:
     - uses: actions/checkout@v3
@@ -34,5 +29,4 @@ jobs:
 
     - name: Run container from the image
       run: |
-        docker run --name app -d -p 27017:27017 biblioteca-logica:latest
-        # Adicione aqui comandos para aguardar a aplicação ficar pronta, se necessário
+        docker run --name app -d biblioteca-logica:latest
