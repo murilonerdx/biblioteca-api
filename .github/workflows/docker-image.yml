@@ -32,8 +32,7 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag biblioteca-logica:latest
 
-    # Aqui você pode adicionar etapas para testar a imagem, se necessário
     - name: Run container from the image
       run: |
-        docker run --network container:mongo --name app -d biblioteca-logica:latest
-
+        docker run --name app -d -p 27017:27017 biblioteca-logica:latest
+        # Adicione aqui comandos para aguardar a aplicação ficar pronta, se necessário
