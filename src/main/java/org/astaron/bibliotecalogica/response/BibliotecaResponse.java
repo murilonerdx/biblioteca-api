@@ -20,4 +20,5 @@ public class BibliotecaResponse {
 	private String descricao;
 	private LocalDateTime updatedAt = LocalDateTime.now();
 	private List<Livro> livros = new ArrayList<>();
+	private String ldap;
 }

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder(toBuilder = true)
@@ -26,6 +25,7 @@ public class Biblioteca {
 	private String descricao;
 	private LocalDateTime updatedAt = LocalDateTime.now();
 	private List<Livro> livros = new LinkedList<>();
+	private String ldap;
 
 	public Biblioteca(String id, String nome, String descricao) {
 		this.id = id;
@@ -33,9 +33,9 @@ public class Biblioteca {
 		this.descricao = descricao;
 	}
 
-	public BibliotecaResponse toResponse(){
+	public BibliotecaResponse toResponse() {
 		return new BibliotecaResponse(
-				this.id, this.nome, this.descricao, this.updatedAt, this.livros
+				this.id, this.nome, this.descricao, this.updatedAt, this.livros, this.ldap
 		);
 	}
 }

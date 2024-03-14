@@ -20,39 +20,39 @@ public class BibliotecaController {
 	}
 
 	@PostMapping()
-	public BibliotecaResponse criarBiblioteca(@RequestBody BibliotecaRequest request) throws Exception {
-		return bibliotecaService.criarBiblioteca(request);
+	public BibliotecaResponse criarBiblioteca(@RequestBody BibliotecaRequest request, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.criarBiblioteca(request, codigoUso);
 	}
 
 	@PostMapping("add/{livroIdm}/livro/{bibliotecaId}")
-	public BibliotecaResponse criarBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId) throws Exception {
-		return bibliotecaService.adicionarLivro(idLivro, bibliotecaId);
+	public BibliotecaResponse criarBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.adicionarLivro(idLivro, bibliotecaId, codigoUso);
 	}
 
 	@PutMapping("rm/{livroIdm}/livro/{bibliotecaId}")
-	public BibliotecaResponse retirarLivroBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId) throws Exception {
-		return bibliotecaService.retirarLivro(idLivro, bibliotecaId);
+	public BibliotecaResponse retirarLivroBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.retirarLivro(idLivro, bibliotecaId, codigoUso);
 	}
 
 	@PutMapping("att/{bibliotecaId}")
-	public BibliotecaResponse atualizarBiblioteca(@PathVariable("bibliotecaId") String bibliotecaId, @RequestBody BibliotecaRequest request) throws Exception {
-		return bibliotecaService.atualizarBiblioteca(bibliotecaId, request);
+	public BibliotecaResponse atualizarBiblioteca(@PathVariable("bibliotecaId") String bibliotecaId, @RequestBody BibliotecaRequest request, @RequestParam String ldap,@RequestParam String email, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.atualizarBiblioteca(bibliotecaId, request, codigoUso);
 	}
 
 	@GetMapping("/{nome}")
-	public BibliotecaResponse buscarPorNome(@PathVariable("nome") String nome) {
-		return bibliotecaService.findByName(nome);
+	public BibliotecaResponse buscarPorNome(@PathVariable("nome") String nome, @RequestParam String ldap,@RequestParam String email, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.findByName(nome, codigoUso);
 	}
 
 	@GetMapping("livro/{nome}")
-	public List<BibliotecaResponse> buscarBibliotecaPorLivro(@PathVariable("nome") String nomeDoLivro) {
-		return bibliotecaService.findByLivrosNome(nomeDoLivro);
+	public List<BibliotecaResponse> buscarBibliotecaPorLivro(@PathVariable("nome") String nomeDoLivro, @RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.findByLivrosNome(nomeDoLivro, codigoUso);
 	}
 
 
 	@GetMapping()
-	public List<BibliotecaResponse> buscarTodos() {
-		return bibliotecaService.findAll();
+	public List<BibliotecaResponse> buscarTodos(@RequestParam String codigoUso) throws Exception {
+		return bibliotecaService.findAll(codigoUso);
 	}
 
 }
