@@ -19,7 +19,9 @@ spring:
     use-hal-as-default-json-media-type: false
   data:
     mongodb:
-      uri: mongodb://localhost:27017/library
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/library}
+      username: ${MONGO_INITDB_ROOT_USERNAME:root}
+      password: ${MONGO_INITDB_ROOT_PASSWORD:12345}
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
