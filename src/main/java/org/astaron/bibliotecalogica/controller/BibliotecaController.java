@@ -24,17 +24,17 @@ public class BibliotecaController {
 		return bibliotecaService.criarBiblioteca(request, codigoUso);
 	}
 
-	@PostMapping("add/{livroIdm}/livro/{bibliotecaId}")
+	@PostMapping("adicionar-livro/{livroIdm}/{bibliotecaId}")
 	public BibliotecaResponse criarBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId, @RequestParam String codigoUso) throws Exception {
 		return bibliotecaService.adicionarLivro(idLivro, bibliotecaId, codigoUso);
 	}
 
-	@PutMapping("rm/{livroIdm}/livro/{bibliotecaId}")
+	@PutMapping("remover-livro/{livroIdm}/{bibliotecaId}")
 	public BibliotecaResponse retirarLivroBiblioteca(@PathVariable("livroIdm") String idLivro, @PathVariable("bibliotecaId") String bibliotecaId, @RequestParam String codigoUso) throws Exception {
 		return bibliotecaService.retirarLivro(idLivro, bibliotecaId, codigoUso);
 	}
 
-	@PutMapping("att/{bibliotecaId}")
+	@PutMapping("atualizar/{bibliotecaId}")
 	public BibliotecaResponse atualizarBiblioteca(@PathVariable("bibliotecaId") String bibliotecaId, @RequestBody BibliotecaRequest request, @RequestParam String ldap,@RequestParam String email, @RequestParam String codigoUso) throws Exception {
 		return bibliotecaService.atualizarBiblioteca(bibliotecaId, request, codigoUso);
 	}
@@ -44,7 +44,7 @@ public class BibliotecaController {
 		return bibliotecaService.findByName(nome, codigoUso);
 	}
 
-	@GetMapping("livro/{nome}")
+	@GetMapping("buscar-livro/{nome}")
 	public List<BibliotecaResponse> buscarBibliotecaPorLivro(@PathVariable("nome") String nomeDoLivro, @RequestParam String codigoUso) throws Exception {
 		return bibliotecaService.findByLivrosNome(nomeDoLivro, codigoUso);
 	}

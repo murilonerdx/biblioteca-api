@@ -24,23 +24,23 @@ public class PermissaoController {
 		return permissaoService.gerarPermissao(codigoGerador, ldap, email);
 	}
 
-	@PostMapping("/renovar/acesso")
+	@PostMapping("renovar-acesso")
 	public NovoAcessoResponse renovarAcesso(@RequestParam String codigoGerador) throws Exception {
 		return permissaoService.renovarAcess(codigoGerador);
 	}
 
-	@GetMapping("verificar/acesso-restante")
+	@GetMapping("acesso-restante")
 	public int verificarQuantidadeDeAcesso(@RequestParam String codigoGerador) throws Exception {
 		return permissaoService.verificarQuantidadeDeAcessoRestante(codigoGerador);
 	}
 
-	@PostMapping("codigo-uso/solicitar")
+	@PostMapping("solicitar-codigo")
 	public StatusPermissao gerarPermissao(
 								 @RequestParam String ldap, @RequestParam String email) throws Exception {
 		return permissaoService.solicitarPermissao(ldap, email);
 	}
 
-	@PostMapping("adm/dar-permissao")
+	@PostMapping("dar-permissao")
 	public StatusPermissao gerarPermissao(
 			@RequestParam String ldap, @RequestParam String email,@RequestParam String codigoValidador, @RequestParam TipoPermissaoEnum tipoPermissaoEnum) throws Exception {
 		return permissaoService.darPermissao(ldap, email, codigoValidador, tipoPermissaoEnum.name());
