@@ -60,4 +60,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ github.repository_owner }}/biblioteca-logica:$TAG"
+          tags: ${{ github.repository_owner }}/biblioteca-logica:latest"
