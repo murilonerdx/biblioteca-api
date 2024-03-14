@@ -61,7 +61,8 @@ jobs:
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        with:
+          context: .
         run: |
           docker build -f Dockerfile . --tag $IMAGE_TAG
           docker push $IMAGE_TAG
