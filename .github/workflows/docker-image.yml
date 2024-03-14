@@ -44,12 +44,21 @@ jobs:
         id: tag_name
         run: echo ::set-output name=TAG::${GITHUB_REF#refs/tags/}
 
-      - name: Build and push
+      - name: Determine the Image Tag
         run: |
-          TAG=${{ steps.tag_name.outputs.TAG }}
-          if [[ -z "$TAG" ]]; then
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            TAG=${GITHUB_REF#refs/heads/}
+            TAG="${TAG//\//-}"  # Substitui '/' por '-' no nome do branch para compatibilidade com tags Docker
+          else
             TAG="latest"
           fi
-          IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/biblioteca-logica:$TAG"
+          echo "IMAGE_TAG=ghcr.io/${{ github.repository_owner }}/biblioteca-logica:$TAG" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        run: |
           docker build . --file Dockerfile --tag $IMAGE_TAG
           docker push $IMAGE_TAG
+        env:
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
