@@ -2,6 +2,7 @@ package org.astaron.bibliotecalogica.controller;
 
 
 import org.astaron.bibliotecalogica.model.enums.TipoPermissaoEnum;
+import org.astaron.bibliotecalogica.response.NovoAcessoResponse;
 import org.astaron.bibliotecalogica.response.StatusPermissao;
 import org.astaron.bibliotecalogica.service.PermissaoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,16 @@ public class PermissaoController {
 	public String gerarPermissao(@RequestParam String codigoGerador,
 								 @RequestParam String ldap, @RequestParam String email) throws Exception {
 		return permissaoService.gerarPermissao(codigoGerador, ldap, email);
+	}
+
+	@PostMapping("/renovar/acesso")
+	public NovoAcessoResponse renovarAcesso(@RequestParam String codigoGerador) throws Exception {
+		return permissaoService.renovarAcess(codigoGerador);
+	}
+
+	@GetMapping("verificar/acesso-restante")
+	public int verificarQuantidadeDeAcesso(@RequestParam String codigoGerador) throws Exception {
+		return permissaoService.verificarQuantidadeDeAcessoRestante(codigoGerador);
 	}
 
 	@PostMapping("codigo-uso/solicitar")

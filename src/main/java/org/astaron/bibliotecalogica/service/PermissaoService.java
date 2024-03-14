@@ -4,6 +4,7 @@ import org.astaron.bibliotecalogica.handler.BusinessException;
 import org.astaron.bibliotecalogica.model.Permissao;
 import org.astaron.bibliotecalogica.model.enums.TipoPermissaoEnum;
 import org.astaron.bibliotecalogica.repository.PermissaoRepository;
+import org.astaron.bibliotecalogica.response.NovoAcessoResponse;
 import org.astaron.bibliotecalogica.response.StatusPermissao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,9 @@ public class PermissaoService {
 	@Value(value = "${codigos.codigo-validador}")
 	private String cdVl;
 
+	@Value(value = "${codigos.limite-acesso}")
+	private Integer limiteAcesso;
+
 	@Autowired
 	private final PermissaoRepository permissaoRepository;
 
@@ -34,15 +38,45 @@ public class PermissaoService {
 		Permissao byCodigoUso = findByCodigoUso(codigoUso);
 
 		if (byCodigoUso != null) {
-			int qtdAcesso = byCodigoUso.getQtdAcesso();
-			byCodigoUso.setQtdAcesso(qtdAcesso + 1);
-			permissaoRepository.save(byCodigoUso);
-
+			if(byCodigoUso.getQtdAcesso() <= limiteAcesso){
+				int qtdAcesso = byCodigoUso.getQtdAcesso();
+				byCodigoUso.setQtdAcesso(qtdAcesso + 1);
+				permissaoRepository.save(byCodigoUso);
+			}else{
+				throw new BusinessException("Você passou do limite de acesso, por favor renove as permissões");
+			}
 			return true;
 		} else {
 			return false;
 		}
 	}
+
+	public NovoAcessoResponse renovarAcess(String codigoUso){
+		Permissao byCodigoUso = findByCodigoUso(codigoUso);
+
+		if(byCodigoUso != null){
+			String codigoUser = UUID.randomUUID().toString().concat("-" + LocalDate.now() + "-" + byCodigoUso.getLdap());
+			byCodigoUso.setCodigoUso(codigoUser);
+			byCodigoUso.setQtdAcesso(0);
+			permissaoRepository.save(byCodigoUso);
+
+			return new NovoAcessoResponse(codigoUser, limiteAcesso, byCodigoUso.getLdap());
+		}else{
+			throw new BusinessException("Codigo de acesso invalido");
+		}
+	}
+
+	public int verificarQuantidadeDeAcessoRestante(String codigoUso){
+		Permissao byCodigoUso = findByCodigoUso(codigoUso);
+
+		if(byCodigoUso != null){
+			int qtdTotal = limiteAcesso - byCodigoUso.getQtdAcesso();
+			return Math.max((qtdTotal), 0);
+		}else{
+			throw new BusinessException("Codigo de acesso invalido");
+		}
+	}
+
 
 	public Permissao findByCodigoUso(String codigoUso) {
 		return permissaoRepository.findByCodigoUso(codigoUso);
@@ -62,7 +96,7 @@ public class PermissaoService {
 					permissaoRepository.save(byLdapAndEmail);
 					return codigoUser;
 				}
-				if (byLdapAndEmail.getQtdAcesso() >= 10) {
+				if (byLdapAndEmail.getQtdAcesso() >= limiteAcesso) {
 					byLdapAndEmail.setTipoPermissao(TipoPermissaoEnum.EM_ANDAMENTO);
 					permissaoRepository.save(byLdapAndEmail);
 					throw new BusinessException("Você passou dos limites de acesso, por favor solicite novament o acesso");

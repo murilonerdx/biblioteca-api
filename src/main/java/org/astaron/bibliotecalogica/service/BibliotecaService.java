@@ -39,7 +39,6 @@ public class BibliotecaService {
 			return bibliotecaRepository.findByNome(nome).toResponse();
 		}
 		throw new BusinessException("Erro de permissão");
-
 	}
 
 	public List<BibliotecaResponse> findByLivrosNome(String nomeLivro, String codigoUso) throws Exception {

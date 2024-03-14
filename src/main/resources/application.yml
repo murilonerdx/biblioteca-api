@@ -3,6 +3,7 @@ file:
 codigos:
   codigo-validador: "65f20d4e340a2d1109f3ba79"
   codigo-gerador: "65f20d4e340a2d1109f3ba79"
+  limite-acesso: 20
 spring:
   servlet:
     multipart:
